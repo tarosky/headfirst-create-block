@@ -1,0 +1,19 @@
+/**
+ * 以下のスタイルは、サイトのフロントエンドとエディターの両方に適用されます。
+ * グラフブロックの基本的な見た目を定義します。
+ */
+
+.wp-block-tarosky-chart {
+	margin: 2rem 0;
+	padding: 1.5rem;
+	background-color: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+	&__canvas {
+		display: block;
+		max-width: 100%;
+		height: auto;
+	}
+}

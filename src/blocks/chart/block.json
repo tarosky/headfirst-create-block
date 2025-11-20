@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "tarosky/chart",
+	"version": "0.1.0",
+	"title": "グラフ",
+	"category": "tarosky",
+	"icon": "chart-bar",
+	"description": "CSVデータから棒グラフを生成します。Chart.jsを使用したStatic Blockの学習用ブロックです。",
+	"keywords": ["chart", "graph", "csv", "グラフ", "棒グラフ"],
+	"example": {},
+	"attributes": {
+		"csvData": {
+			"type": "string",
+			"default": "ラベル1,ラベル2,ラベル3\n10,20,15"
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": true
+	},
+	"textdomain": "tarosky",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
+}

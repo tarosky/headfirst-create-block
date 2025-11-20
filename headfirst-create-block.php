@@ -63,6 +63,10 @@ add_action( 'init', function() {
 	// twitter bootstrap
 	// @see https://getbootstrap.jp/docs/5.3/getting-started/introduction/
 	wp_register_style( 'bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css', [], null, 'screen' );
+
+	// Chart.js
+	// @see https://www.chartjs.org/
+	wp_register_script( 'chart-js', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js', [], '4.4.0', true );
 } );
 
 /**
