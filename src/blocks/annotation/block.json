@@ -4,7 +4,7 @@
 	"name": "tarosky/annotation",
 	"version": "0.1.0",
 	"title": "注釈",
-	"category": "text",
+	"category": "tarosky",
 	"icon": "info",
 	"description": "補足情報や注釈を表示するブロック。InnerBlocksを使って内部に見出しや段落を追加できます。",
 	"keywords": ["annotation", "note", "aside", "注釈", "補足"],

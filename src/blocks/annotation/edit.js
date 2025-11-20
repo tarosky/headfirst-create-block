@@ -24,6 +24,8 @@ import './editor.scss';
 /**
  * edit関数はエディターのコンテキストにおけるブロックの構造を定義します。
  * InnerBlocksを使用することで、このブロック内に他のブロックをネストできます。
+ * allowedBlocksで中に配置できるブロックを制限できるので、dl(>dt, dd)のような「制限」が簡単になります。
+ * また、templateを指定すると、初期値を設定できます。
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  *

@@ -44,16 +44,16 @@ add_action( 'init', function () {
 add_filter( 'block_categories_all', function ( $categories ) {
 	$new_categories = [];
 	foreach ( $categories as $category ) {
-		if ( 'widget' === $category->slug ) {
+		if ( 'widgets' === $category['slug'] ) {
 			$new_categories[] = [
 				'slug'  => 'tarosky',
-                'title' => 'Tarosky',
-                'icon'  => 'building',
+				'title' => 'Tarosky',
+				'icon'  => 'building',
 			];
 		}
 		$new_categories[] = $category;
 	}
-	return $categories;
+	return $new_categories;
 } );
 
 /**
