@@ -1,0 +1,16 @@
+{
+	"plugins": [
+		".",
+		"https://downloads.wordpress.org/plugin/query-monitor.latest-stable.zip",
+        "https://downloads.wordpress.org/plugin/plugin-check.latest-stable.zip"
+	],
+	"themes": [
+		"https://downloads.wordpress.org/theme/twentytwentyfive.latest-stable.zip"
+	],
+	"config": {
+		"WP_DEBUG": true,
+		"WP_DEBUG_LOG": true,
+		"WP_DEBUG_DISPLAY": false
+	},
+	"phpVersion": "8.1"
+}

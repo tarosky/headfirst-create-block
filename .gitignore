@@ -1,0 +1,8 @@
+/node_modules/
+/build/
+/wordpress/
+
+# ブロックは自由についかできるよう都度指定
+src/blocks/*
+!src/blocks/alert/
+!src/blocks/sample/

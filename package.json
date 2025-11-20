@@ -1,0 +1,29 @@
+{
+    "name": "headfirst-create-block",
+    "version": "1.0.0",
+    "description": "create blockの学習用リポジトリです。",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+		"start": "wp-env start",
+		"update": "wp-env start --update",
+		"stop": "wp-env stop",
+		"cli": "wp-env run cli wp",
+		"cli:test": "wp-env run tests-cli wp",
+		"build": "wp-scripts build --source-path=src/blocks --output-path=build/blocks",
+		"watch": "wp-scripts start --source-path=src/blocks --output-path=build/blocks",
+		"lint": "npm run lint:js && npm run lint:css",
+		"lint:css": "wp-scripts lint-style './src/blocks/**/*.scss'",
+		"lint:js": "wp-scripts lint-js './src/blocks/**/*.js'"
+	},
+    "author": "Tarosky INC<sushi@tarosky.co.jp>",
+    "license": "GPL-3.0-or-later",
+    "volta": {
+        "node": "22.21.1"
+    },
+    "devDependencies": {
+        "@wordpress/create-block": "^4.78.0",
+        "@wordpress/env": "^10.35.0",
+        "@wordpress/scripts": "^31.0.0"
+    }
+}
