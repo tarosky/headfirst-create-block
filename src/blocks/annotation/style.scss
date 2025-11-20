@@ -1,0 +1,22 @@
+/**
+ * 以下のスタイルは、サイトのフロントエンドとエディターの両方に適用されます。
+ * 注釈ブロックの基本的な見た目を定義します。
+ */
+
+.wp-block-tarosky-annotation {
+	background-color: #f0f6fc;
+	border-left: 4px solid #0969da;
+	padding: 1rem 1.5rem;
+	margin: 1.5rem 0;
+
+	// 内部の見出しのスタイル調整
+	h1, h2, h3, h4, h5, h6 {
+		margin-top: 0;
+		color: #0969da;
+	}
+
+	// 最後の要素のマージンを削除
+	> :last-child {
+		margin-bottom: 0;
+	}
+}

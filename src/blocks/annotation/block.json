@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "tarosky/annotation",
+	"version": "0.1.0",
+	"title": "注釈",
+	"category": "text",
+	"icon": "info",
+	"description": "補足情報や注釈を表示するブロック。InnerBlocksを使って内部に見出しや段落を追加できます。",
+	"keywords": ["annotation", "note", "aside", "注釈", "補足"],
+	"example": {},
+	"supports": {
+		"html": false,
+		"color": {
+			"background": true,
+			"text": true
+		},
+		"spacing": {
+			"padding": true,
+			"margin": true
+		}
+	},
+	"textdomain": "tarosky",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}

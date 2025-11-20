@@ -6,3 +6,4 @@
 src/blocks/*
 !src/blocks/alert/
 !src/blocks/sample/
+!src/blocks/annotation

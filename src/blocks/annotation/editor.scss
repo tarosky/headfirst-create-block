@@ -1,0 +1,11 @@
+/**
+ * 以下のスタイルは、エディター内でのみ適用されます。
+ * InnerBlocksの編集エリアを明確にするためのスタイルです。
+ */
+
+.wp-block-tarosky-annotation {
+	// InnerBlocksのアペンダー（ブロック追加ボタン）のスタイル
+	.block-editor-inner-blocks .block-list-appender {
+		margin-top: 1rem;
+	}
+}
