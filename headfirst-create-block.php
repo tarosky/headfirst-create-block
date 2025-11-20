@@ -70,6 +70,17 @@ add_action( 'init', function() {
 } );
 
 /**
+ * グラフブロックが使われているときにChart.jsを読み込む
+ */
+add_filter( 'render_block', function( $block_content, $block ) {
+	// グラフブロックの場合、Chart.jsをエンキュー
+	if ( 'tarosky/chart' === $block['blockName'] ) {
+		wp_enqueue_script( 'chart-js' );
+	}
+	return $block_content;
+}, 10, 2 );
+
+/**
  * 天気情報ブロックのAPI設定を読み込む
  */
 require_once __DIR__ . '/includes/setting-weather.php';
