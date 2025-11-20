@@ -21,6 +21,14 @@ import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, TextControl, SelectControl } from '@wordpress/components';
 
 /**
+ * サーバーサイドでレンダリングされたブロックをエディター内で表示するコンポーネント。
+ * render.phpの出力をエディター内でもプレビューできます。
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-server-side-render/
+ */
+import ServerSideRender from '@wordpress/server-side-render';
+
+/**
  * JavaScriptファイルから参照されるCSS、SASS、SCSSファイルをwebpackで処理します。
  *
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
@@ -29,15 +37,15 @@ import './editor.scss';
 
 /**
  * edit関数はエディターのコンテキストにおけるブロックの構造を定義します。
- * Dynamic Blockなので、エディターではプレースホルダーを表示し、
- * 実際のレンダリングはPHP（render.php）で行います。
+ * Dynamic Blockなので、ServerSideRenderコンポーネントを使用して、
+ * エディター内でもrender.phpの実際の出力をプレビュー表示します。
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  *
  * @param {Object} props - ブロックのプロパティ
  * @return {Element} レンダリングする要素。
  */
-export default function Edit( { attributes, setAttributes } ) {
+export default function Edit( { attributes, setAttributes, name } ) {
 	const { location, unit } = attributes;
 	const blockProps = useBlockProps();
 
@@ -64,17 +72,10 @@ export default function Edit( { attributes, setAttributes } ) {
 			</InspectorControls>
 
 			<div { ...blockProps }>
-				<div className="wp-block-tarosky-weather__placeholder">
-					<span className="dashicons dashicons-cloud"></span>
-					<p>
-						{ __( '天気情報ブロック', 'tarosky' ) }
-						<br />
-						<strong>{ location || __( '都市名を設定してください', 'tarosky' ) }</strong>
-					</p>
-					<p className="description">
-						{ __( '実際の天気情報は公開ページで表示されます', 'tarosky' ) }
-					</p>
-				</div>
+				<ServerSideRender
+					block={ name }
+					attributes={ attributes }
+				/>
 			</div>
 		</>
 	);

@@ -59,7 +59,33 @@ import { PanelBody, TextControl, SelectControl } from '@wordpress/components';
 - `ToggleControl`: ON/OFFスイッチ
 - `RangeControl`: スライダー
 
-### 3. 外部API連携
+### 3. ServerSideRender（エディター内プレビュー）
+
+Dynamic Blockの場合、エディター内でもPHPでレンダリングされた実際の表示を確認できると便利です。`ServerSideRender`コンポーネントを使うことで、エディター内で`render.php`の出力をプレビュー表示できます。
+
+**基本的な使い方：**
+
+```javascript
+import ServerSideRender from '@wordpress/server-side-render';
+
+<ServerSideRender
+  block={ name }           // ブロック名（例: 'tarosky/weather'）
+  attributes={ attributes } // ブロックの属性
+/>
+```
+
+**メリット：**
+
+- エディターとフロントエンドで同じ見た目を確認できる
+- プレースホルダーを別途作る必要がない
+- 属性を変更するとリアルタイムで更新される
+
+**注意点：**
+
+- APIリクエストなどサーバー処理が発生するため、表示に時間がかかる場合がある
+- エディター内で何度もレンダリングが走るため、キャッシュ機構が重要
+
+### 4. 外部API連携
 
 **WordPressのHTTP API：**
 
@@ -84,7 +110,7 @@ $data = json_decode( $body, true );
 - WordPressのフィルターフックで拡張可能
 - HTTPSに対応
 
-### 4. Transient API（キャッシュ機構）
+### 5. Transient API（キャッシュ機構）
 
 同じデータを何度もAPIから取得するのは非効率です。Transient APIを使ってキャッシュします。
 
@@ -113,7 +139,7 @@ if ( false === $data ) {
 - `DAY_IN_SECONDS`: 86400秒
 - `WEEK_IN_SECONDS`: 604800秒
 
-### 5. エラーハンドリング
+### 6. エラーハンドリング
 
 APIを使用する場合、複数のエラーケースに対応する必要があります。
 
@@ -125,7 +151,7 @@ APIを使用する場合、複数のエラーケースに対応する必要が�
 
 それぞれのケースで適切なエラーメッセージを表示します。
 
-### 6. 設定画面の作成
+### 7. 設定画面の作成
 
 API キーなどの機密情報は、ブロックの属性ではなくWordPressの設定に保存します。
 
@@ -157,8 +183,8 @@ function headfirst_get_weather_api_key() {
 weather/
 ├── block.json       # ブロックのメタデータ（attributes, render指定）
 ├── index.js         # ブロックの登録
-├── edit.js          # エディター表示（InspectorControls + プレースホルダー）
-├── render.php       # フロントエンド表示（API呼び出し + レンダリング）
+├── edit.js          # エディター表示（InspectorControls + ServerSideRender）
+├── render.php       # サーバーサイドレンダリング（API呼び出し + HTML生成）
 ├── style.scss       # フロントエンド + エディター共通スタイル
 ├── editor.scss      # エディター専用スタイル
 └── README.md        # このファイル
@@ -171,10 +197,11 @@ weather/
 ### エディター内
 
 1. ユーザーがブロックを挿入
-2. `edit.js`がプレースホルダーを表示
-3. サイドバー（InspectorControls）で都市名と温度単位を設定
-4. 設定は`attributes`として保存される
-5. 実際の天気情報は表示されない（「実際の天気情報は公開ページで表示されます」と表示）
+2. `edit.js`が`ServerSideRender`コンポーネントを表示
+3. `ServerSideRender`が内部で`render.php`を呼び出す
+4. サイドバー（InspectorControls）で都市名と温度単位を設定
+5. 属性を変更すると、`ServerSideRender`が自動的に再レンダリング
+6. **エディター内でも実際の天気情報がリアルタイムで表示される**
 
 ### フロントエンド
 
@@ -185,6 +212,8 @@ weather/
 5. キャッシュがなければOpenWeatherMap APIを呼び出す
 6. 取得したデータをキャッシュ（1時間）
 7. HTMLを生成して表示
+
+**重要**: エディター内もフロントエンドも同じ`render.php`を使用するため、表示が完全に一致します。
 
 ## 技術仕様
 
@@ -217,6 +246,7 @@ weather/
 
 - [Dynamic Blocks - Block Editor Handbook](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/creating-dynamic-blocks/)
 - [InspectorControls - @wordpress/block-editor](https://developer.wordpress.org/block-editor/reference-guides/components/inspector-controls/)
+- [ServerSideRender - @wordpress/server-side-render](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-server-side-render/)
 - [Transient API - WordPress Developer Resources](https://developer.wordpress.org/apis/transients/)
 - [HTTP API - WordPress Developer Resources](https://developer.wordpress.org/plugins/http-api/)
 - [OpenWeatherMap API Documentation](https://openweathermap.org/current)
