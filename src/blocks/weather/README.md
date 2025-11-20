@@ -1,0 +1,222 @@
+# 天気ブロック（Weather Block）
+
+指定した都市の現在の天気情報を表示するDynamic Blockです。OpenWeatherMap APIを使用して、リアルタイムの気象データを取得・表示します。
+
+## 学習のポイント
+
+このブロックでは以下のWordPressブロック開発の重要な概念を学ぶことができます：
+
+### 1. Dynamic Block（動的ブロック）
+
+**通常のブロックとの違い：**
+
+- **Static Block（静的ブロック）**: `save()`関数でHTMLをシリアライズし、`post_content`に保存。表示時はそのHTMLをそのまま出力
+- **Dynamic Block（動的ブロック）**: `save()`関数を持たず、表示時にPHPで動的にレンダリング
+
+**Dynamic Blockが適している場面：**
+
+- 外部APIからデータを取得する場合（本ブロック）
+- データベースから最新情報を取得する場合
+- ユーザーの状態（ログイン/ログアウト）によって表示を変える場合
+- サーバー側の処理が必要な場合
+
+**block.jsonでの定義：**
+
+```json
+{
+  "render": "file:./render.php"
+}
+```
+
+`render`プロパティでPHPファイルを指定すると、そのファイルが表示時に呼び出されます。`save()`関数は不要です。
+
+### 2. InspectorControls（サイドバー設定UI）
+
+エディター右サイドバーに設定パネルを追加するコンポーネントです。
+
+**基本的な使い方：**
+
+```javascript
+import { InspectorControls } from '@wordpress/block-editor';
+import { PanelBody, TextControl, SelectControl } from '@wordpress/components';
+
+<InspectorControls>
+  <PanelBody title="設定">
+    <TextControl
+      label="ラベル"
+      value={ attribute }
+      onChange={ ( value ) => setAttributes( { attribute: value } ) }
+    />
+  </PanelBody>
+</InspectorControls>
+```
+
+**主要なコンポーネント：**
+
+- `PanelBody`: 折りたたみ可能なパネル
+- `TextControl`: テキスト入力
+- `SelectControl`: ドロップダウン選択
+- `ToggleControl`: ON/OFFスイッチ
+- `RangeControl`: スライダー
+
+### 3. 外部API連携
+
+**WordPressのHTTP API：**
+
+`wp_remote_get()`を使用することで、安全にHTTPリクエストを送信できます。
+
+```php
+$response = wp_remote_get( $api_url );
+
+if ( is_wp_error( $response ) ) {
+    // エラー処理
+    $error_message = $response->get_error_message();
+}
+
+$body = wp_remote_retrieve_body( $response );
+$data = json_decode( $body, true );
+```
+
+**`wp_remote_get()`を使う理由：**
+
+- cURLの有無に関わらず動作
+- タイムアウトやエラーハンドリングが組み込まれている
+- WordPressのフィルターフックで拡張可能
+- HTTPSに対応
+
+### 4. Transient API（キャッシュ機構）
+
+同じデータを何度もAPIから取得するのは非効率です。Transient APIを使ってキャッシュします。
+
+**基本的な使い方：**
+
+```php
+// キャッシュキーの生成（パラメータごとに一意に）
+$cache_key = 'weather_' . md5( $location . $unit );
+
+// キャッシュから取得
+$data = get_transient( $cache_key );
+
+if ( false === $data ) {
+    // キャッシュがない場合はAPIを呼び出す
+    $data = fetch_from_api();
+
+    // 1時間キャッシュ
+    set_transient( $cache_key, $data, HOUR_IN_SECONDS );
+}
+```
+
+**キャッシュの有効期限：**
+
+- `MINUTE_IN_SECONDS`: 60秒
+- `HOUR_IN_SECONDS`: 3600秒
+- `DAY_IN_SECONDS`: 86400秒
+- `WEEK_IN_SECONDS`: 604800秒
+
+### 5. エラーハンドリング
+
+APIを使用する場合、複数のエラーケースに対応する必要があります。
+
+**このブロックで処理しているエラー：**
+
+1. **APIキー未設定**: `empty( $api_key )`
+2. **ネットワークエラー**: `is_wp_error( $response )`
+3. **APIエラー**: `! isset( $data['main'] )`
+
+それぞれのケースで適切なエラーメッセージを表示します。
+
+### 6. 設定画面の作成
+
+API キーなどの機密情報は、ブロックの属性ではなくWordPressの設定に保存します。
+
+**`includes/setting-weather.php`で実装：**
+
+```php
+// 設定ページの追加
+add_action( 'admin_menu', 'headfirst_weather_add_settings_page' );
+
+// 設定の登録
+add_action( 'admin_init', 'headfirst_weather_register_settings' );
+
+// 設定値の取得
+function headfirst_get_weather_api_key() {
+    return get_option( 'headfirst_weather_api_key', '' );
+}
+```
+
+**なぜブロック属性に保存しないのか：**
+
+- APIキーは投稿コンテンツではない
+- すべてのブロックインスタンスで共有すべき
+- データベースに暗号化されて保存される
+- 投稿のエクスポート時に含まれない
+
+## ファイル構成
+
+```
+weather/
+├── block.json       # ブロックのメタデータ（attributes, render指定）
+├── index.js         # ブロックの登録
+├── edit.js          # エディター表示（InspectorControls + プレースホルダー）
+├── render.php       # フロントエンド表示（API呼び出し + レンダリング）
+├── style.scss       # フロントエンド + エディター共通スタイル
+├── editor.scss      # エディター専用スタイル
+└── README.md        # このファイル
+```
+
+**注意**: Dynamic Blockなので`save.js`は**ありません**。
+
+## ブロックの動作フロー
+
+### エディター内
+
+1. ユーザーがブロックを挿入
+2. `edit.js`がプレースホルダーを表示
+3. サイドバー（InspectorControls）で都市名と温度単位を設定
+4. 設定は`attributes`として保存される
+5. 実際の天気情報は表示されない（「実際の天気情報は公開ページで表示されます」と表示）
+
+### フロントエンド
+
+1. 投稿が表示される
+2. WordPressが`render.php`を呼び出す
+3. `$attributes`配列で設定値（都市名、温度単位）を受け取る
+4. Transientキャッシュをチェック
+5. キャッシュがなければOpenWeatherMap APIを呼び出す
+6. 取得したデータをキャッシュ（1時間）
+7. HTMLを生成して表示
+
+## 技術仕様
+
+### API
+
+- **サービス**: OpenWeatherMap API
+- **エンドポイント**: `https://api.openweathermap.org/data/2.5/weather`
+- **パラメータ**:
+  - `q`: 都市名（例: Tokyo, Osaka, London）
+  - `appid`: APIキー
+  - `units`: 温度単位（`metric` = 摂氏、`imperial` = 華氏）
+  - `lang`: 言語（`ja` = 日本語）
+
+### 表示データ
+
+- 都市名
+- 天気の説明（例: 晴れ、曇り）
+- 天気アイコン
+- 現在の気温
+- 体感温度
+- 湿度
+
+### キャッシュ
+
+- **方式**: WordPress Transient API
+- **有効期限**: 1時間
+- **キーの形式**: `weather_{md5(location+unit)}`
+
+## 参考リンク
+
+- [Dynamic Blocks - Block Editor Handbook](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/creating-dynamic-blocks/)
+- [InspectorControls - @wordpress/block-editor](https://developer.wordpress.org/block-editor/reference-guides/components/inspector-controls/)
+- [Transient API - WordPress Developer Resources](https://developer.wordpress.org/apis/transients/)
+- [HTTP API - WordPress Developer Resources](https://developer.wordpress.org/plugins/http-api/)
+- [OpenWeatherMap API Documentation](https://openweathermap.org/current)

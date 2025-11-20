@@ -1,0 +1,32 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "tarosky/weather",
+	"version": "0.1.0",
+	"title": "天気",
+	"category": "tarosky",
+	"icon": "cloud",
+	"description": "指定した都市の天気情報を表示します。OpenWeatherMap APIを使用したDynamic Blockの学習用ブロックです。",
+	"keywords": ["weather", "天気", "気温", "forecast"],
+	"example": {},
+	"attributes": {
+		"location": {
+			"type": "string",
+			"default": "Tokyo"
+		},
+		"unit": {
+			"type": "string",
+			"default": "metric",
+			"enum": ["metric", "imperial"]
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": true
+	},
+	"textdomain": "tarosky",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}
