@@ -9,3 +9,6 @@ src/blocks/*
 !src/blocks/annotation
 !src/blocks/weather
 !src/blocks/chart
+
+# AI
+.claude/settings.local.json

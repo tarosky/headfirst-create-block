@@ -23,6 +23,7 @@ import { PanelBody, TextControl, SelectControl } from '@wordpress/components';
 /**
  * サーバーサイドでレンダリングされたブロックをエディター内で表示するコンポーネント。
  * render.phpの出力をエディター内でもプレビューできます。
+ * このコンポーネントにattributesを渡すと、その内容でレンダリングします。
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-server-side-render/
  */

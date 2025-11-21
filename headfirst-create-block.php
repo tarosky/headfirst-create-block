@@ -54,6 +54,7 @@ add_filter( 'block_categories_all', function ( $categories ) {
 		$new_categories[] = $category;
 	}
 	return $new_categories;
+
 } );
 
 /**
@@ -68,17 +69,6 @@ add_action( 'init', function() {
 	// @see https://www.chartjs.org/
 	wp_register_script( 'chart-js', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js', [], '4.4.0', true );
 } );
-
-/**
- * グラフブロックが使われているときにChart.jsを読み込む
- */
-add_filter( 'render_block', function( $block_content, $block ) {
-	// グラフブロックの場合、Chart.jsをエンキュー
-	if ( 'tarosky/chart' === $block['blockName'] ) {
-		wp_enqueue_script( 'chart-js' );
-	}
-	return $block_content;
-}, 10, 2 );
 
 /**
  * 天気情報ブロックのAPI設定を読み込む
