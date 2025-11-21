@@ -5,6 +5,9 @@
  * このブロックを含む投稿/固定ページのフロントエンドでこのファイルが読み込まれます。
  *
  * このファイルでは、Chart.jsを使ってグラフを描画します。
+ * Chart.jsは以下の方法で読み込んでいます。
+ * 1. chart-jsとしてwp_register_scriptで登録（headfirst-create-block.php)
+ * 2. block.jsonでviewScriptに依存先として登録（配列で書くことができます）
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/#view-script
  */

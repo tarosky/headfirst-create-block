@@ -63,13 +63,34 @@ add_action( 'init', function() {
 } );
 ```
 
-**block.jsonでの依存関係指定はできない：**
+**block.jsonでの依存関係指定：**
 
-残念ながら、block.jsonでは外部スクリプトの依存関係を直接指定できません。そのため：
+`viewScript`プロパティは**配列**で複数のスクリプトを指定できます：
 
-- `wp_register_script()`でグローバルに登録
-- このブロックを含むページでChart.jsが読み込まれることを前提とする
-- view.js内で`typeof Chart`をチェックして、読み込みを確認
+```json
+{
+  "viewScript": [ "chart-js", "file:./view.js" ]
+}
+```
+
+この設定により：
+
+1. 最初に`chart-js`（`wp_register_script()`で登録したChart.js）が読み込まれる
+2. 次に`view.js`が読み込まれる
+3. 依存関係が自動的に解決される
+
+**メリット：**
+
+- ✅ 依存関係がblock.jsonで宣言的に記述される
+- ✅ PHPでの`wp_enqueue_script()`が不要
+- ✅ ブロックの設定が一箇所に集約される
+- ✅ グラフブロックが存在するページでのみChart.jsが読み込まれる
+
+**重要な注意点：**
+
+- `wp_register_script()`で登録したハンドル名（`chart-js`）を使用する
+- 配列の順序が重要（依存関係の順に記述）
+- 文字列で指定するとそのスクリプトのみ読み込まれる
 
 ### 4. データ属性を使ったデータの受け渡し
 
@@ -135,7 +156,7 @@ function parseCSV( csvData ) {
 
 ```
 chart/
-├── block.json       # ブロックのメタデータ（attributes, viewScript指定）
+├── block.json       # ブロックのメタデータ（attributes, viewScript配列で依存関係指定）
 ├── index.js         # ブロックの登録（edit + save）
 ├── edit.js          # エディター表示（CSV入力 + 表プレビュー）
 ├── save.js          # 保存するHTML（<canvas data-csv="...">）
@@ -145,7 +166,9 @@ chart/
 └── README.md        # このファイル
 ```
 
-**重要**: Static Blockなので`save.js`が**あります**（Dynamic Blockとの違い）。
+**重要**:
+- Static Blockなので`save.js`が**あります**（Dynamic Blockとの違い）
+- `viewScript`を配列で指定することで、Chart.jsへの依存関係を明示的に宣言
 
 ## ブロックの動作フロー
 
@@ -169,11 +192,14 @@ chart/
 
 1. 投稿が表示される
 2. WordPressが保存されたHTMLを出力
-3. `view.js`が実行される（`viewScript`で指定）
-4. すべての`.wp-block-tarosky-chart__canvas`を検索
-5. 各canvasの`data-csv`属性からCSVデータを取得
-6. CSVをパース
-7. Chart.jsでグラフを描画
+3. `viewScript`配列の順に従って、Chart.jsが読み込まれる
+4. 次に`view.js`が実行される
+5. すべての`.wp-block-tarosky-chart__canvas`を検索
+6. 各canvasの`data-csv`属性からCSVデータを取得
+7. CSVをパース
+8. Chart.jsでグラフを描画
+
+**重要**: `viewScript: ["chart-js", "file:./view.js"]`の配列順序により、Chart.jsが先に読み込まれることが保証されます。
 
 ## 技術仕様
 
@@ -182,6 +208,10 @@ chart/
 - **バージョン**: 4.4.0
 - **CDN**: https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js
 - **グラフタイプ**: 棒グラフ（bar）固定
+- **読み込み方法**:
+  1. PHPで`wp_register_script('chart-js', ...)`により登録
+  2. block.jsonの`viewScript: ["chart-js", "file:./view.js"]`で依存関係を宣言
+  3. グラフブロックが存在するページでのみ自動的に読み込まれる
 
 ### CSVフォーマット
 
