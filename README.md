@@ -73,7 +73,7 @@ Dockerが立ち上がり、URLが表示されます。
 `tarosky/alert` というブロックを作る場合は以下の通り。
 
 ```bash
-npx @wordpress/create-block alert --no-plugin --namespace tarosky --textdomain tarrosky --target-dir src/blocks/alert --title "アラート"
+npx @wordpress/create-block alert --no-plugin --namespace tarosky --textdomain tarosky --target-dir src/blocks/alert --title "アラート"
 ```
 
 - `--no-plugin` このオプションを指定しない場合、通常は1つのブロックを持つプラグイン作成しようとします。タロスカイでは「既存のテーマやプラグインにブロックを追加する」というユースケースがほとんどだと思われるので、このオプションを指定します。
