@@ -50,6 +50,11 @@ add_filter( 'block_categories_all', function ( $categories ) {
 				'title' => 'Tarosky',
 				'icon'  => 'building',
 			];
+			$new_categories[] = [
+				'slug'  => 'morimoto',
+				'title' => 'Morimoto',
+				'icon'  => 'carrot',
+			];
 		}
 		$new_categories[] = $category;
 	}

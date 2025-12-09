@@ -1,72 +1,39 @@
 /**
- * アラートボックス
+ * Registers a new block provided a unique name and an object defining its behavior.
  *
- * このブロックで学べること：
- * 1. 別でregister_styleしたもの（Bootstrap）を利用できる
- * 2. 「スタイル」という基本的なプロパティを切り替えると見た目が変わる
- *
- * まとめて1つのJSにしても問題ないです。
- * WordPressのコアは分けていることが多いです。
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
-
 import { registerBlockType } from '@wordpress/blocks';
-import { useBlockProps, RichText } from '@wordpress/block-editor';
-import { __ } from '@wordpress/i18n';
 
+/**
+ * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
+ * All files containing `style` keyword are bundled together. The code used
+ * gets applied both to the front of your site and to the editor.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+import './style.scss';
+
+/**
+ * Internal dependencies
+ */
+import Edit from './edit';
+import save from './save';
 import metadata from './block.json';
 
 /**
- * Bootstrapのアラートクラスを取得する
+ * Every block starts by registering a new block type definition.
  *
- * WordPressは選択されたスタイルに応じて 'is-style-{name}' クラスを自動追加します。
- * このクラスからBootstrapの 'alert-{type}' クラスに変換します。
- *
- * @param {string} className - ブロックのクラス名
- * @return {string} Bootstrapのアラートタイプ（例：'alert-primary'）
- */
-function getAlertClass( className ) {
-	// is-style-primary → alert-primary に変換
-	const match = className?.match( /is-style-(\w+)/ );
-	return match ? `alert-${ match[ 1 ] }` : 'alert-primary';
-}
-
-/**
- * ブロックの登録
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
 registerBlockType( metadata.name, {
 	/**
-	 * エディター内での表示
+	 * @see ./edit.js
 	 */
-	edit( { attributes, setAttributes, className } ) {
-		const blockProps = useBlockProps();
-		const alertClass = getAlertClass( blockProps.className );
-
-		return (
-			<RichText
-				{ ...blockProps }
-				tagName="div"
-				className={ `${ blockProps.className } alert ${ alertClass }` }
-				value={ attributes.content }
-				onChange={ ( content ) => setAttributes( { content } ) }
-				placeholder={ __( 'アラートメッセージを入力...', 'tarosky' ) }
-			/>
-		);
-	},
+	edit: Edit,
 
 	/**
-	 * 保存時のHTML出力
+	 * @see ./save.js
 	 */
-	save( { attributes } ) {
-		const blockProps = useBlockProps.save();
-		const alertClass = getAlertClass( blockProps.className );
-
-		return (
-			<RichText.Content
-				{ ...blockProps }
-				tagName="div"
-				className={ `${ blockProps.className } alert ${ alertClass }` }
-				value={ attributes.content }
-			/>
-		);
-	},
+	save,
 } );
