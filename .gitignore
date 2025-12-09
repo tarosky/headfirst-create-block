@@ -5,6 +5,7 @@
 # ブロックは自由についかできるよう都度指定
 src/blocks/*
 !src/blocks/alert/
+!src/blocks/mm-alert/
 !src/blocks/sample/
 !src/blocks/annotation
 !src/blocks/weather

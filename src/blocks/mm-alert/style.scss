@@ -1,0 +1,33 @@
+/**
+ * style.scss は、ビルド後に style-index.css になる
+ */
+
+.wp-block-tarosky-mm-alert {
+	margin: 1rem 0;
+
+	/* デフォルト */
+	.mm-alert {
+		padding: 1rem;
+		border-radius: 4px;
+		background-color: lightyellow;
+		color: black;
+	}
+
+	/* Warning（黄）*/
+	&.is-style-warning .mm-alert {
+		background-color: lightyellow;
+		color: black;
+	}
+
+	/* Info（緑） */
+	&.is-style-info .mm-alert {
+		background-color: #d1e7dd;
+		color: green;
+	}
+
+	/* Danger（赤） */
+	&.is-style-danger .mm-alert {
+		background-color: #f8d7da;
+		color: red;
+	}
+}

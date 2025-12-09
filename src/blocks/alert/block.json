@@ -3,17 +3,58 @@
 	"apiVersion": 3,
 	"name": "tarosky/alert",
 	"version": "0.1.0",
-	"title": "アラート",
-	"category": "widgets",
-	"icon": "smiley",
-	"description": "Example block scaffolded with Create Block tool.",
+	"title": "アラートボックス",
+	"category": "tarosky",
+	"icon": "warning",
+	"description": "Bootstrapのアラートスタイルを切り替えられるブロック",
 	"example": {},
 	"supports": {
 		"html": false
 	},
-	"textdomain": "tarrosky",
+	"textdomain": "tarosky",
+	"attributes": {
+		"content": {
+			"type": "string",
+			"source": "html",
+			"selector": ".alert",
+			"default": ""
+		}
+	},
 	"editorScript": "file:./index.js",
-	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css",
-	"viewScript": "file:./view.js"
+	"style": "bootstrap",
+	"styles": [
+		{
+			"name": "primary",
+			"label": "Primary（青）",
+			"isDefault": true
+		},
+		{
+			"name": "secondary",
+			"label": "Secondary（グレー）"
+		},
+		{
+			"name": "success",
+			"label": "Success（緑）"
+		},
+		{
+			"name": "warning",
+			"label": "Warning（黄）"
+		},
+		{
+			"name": "danger",
+			"label": "Danger（赤）"
+		},
+		{
+			"name": "info",
+			"label": "Info（水色）"
+		},
+		{
+			"name": "light",
+			"label": "Light（白）"
+		},
+		{
+			"name": "dark",
+			"label": "Dark（黒）"
+		}
+	]
 }
