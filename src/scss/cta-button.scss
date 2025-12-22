@@ -1,0 +1,167 @@
+/*!
+ * CTA Button Styles
+ *
+ * CTAボタン（矢印付き）のスタイル定義
+ *
+ * このCSSはフロントエンドとエディターの両方で読み込まれ、
+ * CTAボタンバリエーションの見た目を定義する。
+ *
+ * @handle cta-button-style
+ */
+
+// =============================================================================
+// CTAボタン（矢印付き）のスタイル
+// =============================================================================
+//
+// HTML構造（フロントエンド）:
+// <div class="wp-block-button is-cta-arrow">
+//     <a class="wp-block-button__link" href="#">
+//         お申し込みはこちら
+//         <span class="cta-arrow" aria-hidden="true">→</span>
+//     </a>
+// </div>
+//
+// 注意: .cta-arrow は JavaScript (cta-button-view.js) によって
+// 動的に追加される要素である。
+//
+
+/**
+ * CTAボタンのベーススタイル
+ *
+ * .wp-block-button: ボタンブロックのラッパー要素
+ * .is-cta-arrow: CTAバリエーションを示すクラス（registerBlockVariationで設定）
+ */
+.wp-block-button.is-cta-arrow {
+	/**
+	 * ボタン本体（リンク要素）のスタイル
+	 *
+	 * .wp-block-button__link は WordPress が自動的に付与するクラス
+	 */
+	.wp-block-button__link {
+		// 矢印を配置するための相対位置指定
+		position: relative;
+
+		// 矢印分の余白を確保
+		// 右側にスペースを作ることで、矢印が表示されても
+		// テキストが押し出されないようにする
+		padding-right: 2.5em;
+
+		// ホバー時のトランジション
+		// background-color と transform の変化をスムーズにする
+		transition:
+			background-color 0.2s ease,
+			transform 0.2s ease;
+
+		// テキストの折り返しを防止
+		// 矢印がある関係で、テキストが折り返されると
+		// レイアウトが崩れる可能性があるため
+		white-space: nowrap;
+	}
+
+	/**
+	 * 矢印要素のスタイル
+	 *
+	 * この要素は JavaScript によって動的に追加される。
+	 * aria-hidden="true" が設定されているため、
+	 * スクリーンリーダーには読み上げられない。
+	 */
+	.cta-arrow {
+		// ボタン内で絶対位置指定
+		position: absolute;
+
+		// 垂直方向の中央揃え
+		top: 50%;
+		transform: translateY(-50%);
+
+		// 右端から少し内側に配置
+		right: 1em;
+
+		// 矢印のトランジション
+		// ホバー時に右に移動するアニメーション
+		transition: transform 0.3s ease;
+
+		// 矢印のフォントサイズ
+		font-size: 1.2em;
+
+		// 行の高さを1にして、垂直方向のズレを防ぐ
+		line-height: 1;
+	}
+
+	/**
+	 * ホバー時のスタイル
+	 *
+	 * .is-hovered クラスは JavaScript によって
+	 * mouseenter/mouseleave イベントで切り替えられる。
+	 *
+	 * なぜ :hover ではなく .is-hovered を使うのか:
+	 * - JavaScript でクラスを制御することで、
+	 *   キーボードフォーカス時にも同じ効果を適用できる
+	 * - より複雑な状態管理が可能になる
+	 * - ただし、CSSのみで完結させたい場合は :hover を使っても良い
+	 */
+	.wp-block-button__link.is-hovered {
+		/**
+		 * 矢印を右に移動するアニメーション
+		 *
+		 * translateX(5px) で矢印を5px右に移動させる。
+		 * translateY(-50%) は元の垂直中央揃えを維持するために必要。
+		 */
+		.cta-arrow {
+			transform: translateY(-50%) translateX(5px);
+		}
+	}
+
+	/**
+	 * CSSのみで :hover を使う場合の代替スタイル
+	 *
+	 * JavaScript が無効な環境でもホバー効果を提供するため、
+	 * :hover も併せて定義しておく。
+	 */
+	.wp-block-button__link:hover,
+	.wp-block-button__link:focus {
+		.cta-arrow {
+			transform: translateY(-50%) translateX(5px);
+		}
+	}
+}
+
+// =============================================================================
+// エディター用の追加スタイル
+// =============================================================================
+//
+// エディター内では、プレビュー表示のために追加のスタイルが必要な場合がある。
+// JavaScript による動的な矢印追加がエディターでは行われないため、
+// CSS の ::after 疑似要素で矢印を表示する。
+//
+
+/**
+ * エディター内での矢印表示（CSS疑似要素版）
+ *
+ * .editor-styles-wrapper はブロックエディターのコンテンツ領域を示すクラス。
+ * このセレクタを使うことで、エディター内でのみ適用されるスタイルを定義できる。
+ */
+.editor-styles-wrapper {
+	.wp-block-button.is-cta-arrow {
+		.wp-block-button__link {
+			// エディターでも右側の余白を確保
+			padding-right: 2.5em;
+
+			// 矢印を ::after 疑似要素で追加
+			&::after {
+				content: '→';
+				position: absolute;
+				top: 50%;
+				right: 1em;
+				transform: translateY(-50%);
+				font-size: 1.2em;
+				line-height: 1;
+				transition: transform 0.3s ease;
+			}
+
+			// エディター内でのホバー効果
+			&:hover::after {
+				transform: translateY(-50%) translateX(5px);
+			}
+		}
+	}
+}

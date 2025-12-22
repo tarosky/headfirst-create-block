@@ -105,3 +105,8 @@ require_once __DIR__ . '/includes/setting-weather.php';
  * ブロックスタイル拡張の読み込み
  */
 require_once __DIR__ . '/includes/block-styles.php';
+
+/**
+ * CTAボタン（矢印付き）バリエーションの読み込み
+ */
+require_once __DIR__ . '/includes/cta-button.php';
