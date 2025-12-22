@@ -43,3 +43,32 @@ add_action( 'enqueue_block_assets', function() {
 	// wp-dependencies.json で登録されたハンドル名を使用
 	wp_enqueue_style( 'ts-style' );
 } );
+
+/**
+ * PHPでブロックスタイルを登録する例
+ *
+ * register_block_style() を使うと、JavaScript を使わずに
+ * PHPのみでブロックスタイルを登録できる。
+ *
+ * JSで登録する場合との違い:
+ * - PHP: シンプル、JSファイル不要、翻訳が容易
+ * - JS: 動的な処理が可能、クライアントサイドで完結
+ *
+ * どちらを使うべきか:
+ * - 単純なスタイル追加 → PHP（register_block_style）
+ * - 複雑なロジックが必要 → JS（registerBlockStyle）
+ *
+ * @see https://developer.wordpress.org/reference/functions/register_block_style/
+ */
+add_action( 'init', function() {
+	// セパレーターブロックに「波線」スタイルを追加
+	// src/js/styles.js では gradient と double を登録し、
+	// wave はここで PHP から登録している
+	register_block_style(
+		'core/separator', // 対象のブロック名
+		[
+			'name'  => 'wave',  // スタイルの識別子（CSSクラス: is-style-wave）
+			'label' => '波線',   // エディターに表示される名前
+		]
+	);
+} );

@@ -55,9 +55,6 @@ domReady( () => {
 		label: '二重線',
 	} );
 
-	// 波線スタイル
-	registerBlockStyle( 'core/separator', {
-		name: 'wave',
-		label: '波線',
-	} );
+	// 波線スタイルは PHP で登録する例として includes/block-styles.php に移動
+	// @see register_block_style()
 } );
