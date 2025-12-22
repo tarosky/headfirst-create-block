@@ -1,0 +1,26 @@
+/**
+ * イベント日ブロック - スタイル
+ *
+ * フロントエンドとエディター両方で適用される。
+ */
+
+.wp-block-tarosky-event-date {
+	// コンテンツのスタイル
+	&__content {
+		display: flex;
+		align-items: center;
+		gap: 0.25em;
+		margin: 0;
+	}
+
+	// 接頭辞のスタイル
+	&__prefix {
+		font-weight: 500;
+	}
+
+	// 日付のスタイル
+	&__date {
+		// time要素のデフォルトスタイルをリセット
+		font-style: normal;
+	}
+}

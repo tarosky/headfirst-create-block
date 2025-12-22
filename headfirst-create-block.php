@@ -110,3 +110,8 @@ require_once __DIR__ . '/includes/block-styles.php';
  * CTAボタン（矢印付き）バリエーションの読み込み
  */
 require_once __DIR__ . '/includes/cta-button.php';
+
+/**
+ * イベント日ブロック（useEntityPropでpost_metaを編集）
+ */
+require_once __DIR__ . '/includes/event-date.php';

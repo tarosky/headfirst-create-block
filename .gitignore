@@ -11,6 +11,7 @@ src/blocks/*
 !src/blocks/annotation
 !src/blocks/weather
 !src/blocks/chart
+!src/blocks/event-date
 
 # AI
 .claude/settings.local.json
