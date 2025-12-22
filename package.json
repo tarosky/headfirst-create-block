@@ -5,25 +5,63 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-		"start": "wp-env start",
-		"update": "wp-env start --update",
-		"stop": "wp-env stop",
-		"cli": "wp-env run cli wp",
-		"cli:test": "wp-env run tests-cli wp",
-		"build": "wp-scripts build --source-path=src/blocks --output-path=build/blocks",
-		"watch": "wp-scripts start --source-path=src/blocks --output-path=build/blocks",
-		"lint": "npm run lint:js && npm run lint:css",
-		"lint:css": "wp-scripts lint-style './src/blocks/**/*.scss'",
-		"lint:js": "wp-scripts lint-js './src/blocks/**/*.js'"
-	},
+        "start": "wp-env start",
+        "update": "wp-env start --update",
+        "stop": "wp-env stop",
+        "cli": "wp-env run cli wp",
+        "cli:test": "wp-env run tests-cli wp",
+        "build": "npm run build:css && npm run build:js && npm run build:blocks && npm run dump",
+        "build:js": "grab-deps js src/js build/js js",
+        "build:css": "sass ./src/scss/:./build/css/ --style=compressed && postcss ./build/css/**/*.css --replace",
+        "build:blocks": "wp-scripts build --source-path=src/blocks --output-path=build/blocks",
+        "dump": "grab-deps dump build/js,build/css wp-dependencies.json",
+        "watch": "npm-watch",
+        "watch:blocks": "wp-scripts start --source-path=src/blocks --output-path=build/blocks",
+        "lint": "npm run lint:js && npm run lint:css",
+        "lint:css": "wp-scripts lint-style './src/blocks/**/*.scss' './src/scss/**/*.scss'",
+        "lint:js": "wp-scripts lint-js './src/blocks/**/*.js' './src/js/**/*.js'"
+    },
     "author": "Tarosky INC<sushi@tarosky.co.jp>",
     "license": "GPL-3.0-or-later",
     "volta": {
         "node": "22.21.1"
     },
     "devDependencies": {
+        "@kunoichi/grab-deps": "^3.1.4",
         "@wordpress/create-block": "^4.78.0",
         "@wordpress/env": "^10.35.0",
-        "@wordpress/scripts": "^31.0.0"
+        "@wordpress/scripts": "^31.0.0",
+        "autoprefixer": "^10.4.23",
+        "npm-watch": "^0.13.0",
+        "postcss": "^8.5.6",
+        "postcss-cli": "^11.0.1",
+        "sass": "^1.97.1"
+    },
+    "watch": {
+        "dump": {
+            "extensions": "js,css",
+            "patterns": [
+                "build/js",
+                "build/css"
+            ]
+        },
+        "build:blocks": {
+            "extensions": "js,scss,php,json",
+            "patterns": [
+                "src/blocks"
+            ]
+        },
+        "build:js": {
+            "extensions": "js",
+            "patterns": [
+                "src/js"
+            ]
+        },
+        "build:css": {
+            "extensions": "scss",
+            "patterns": [
+                "src/scss"
+            ]
+        }
     }
 }

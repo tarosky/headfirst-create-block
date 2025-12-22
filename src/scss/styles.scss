@@ -1,0 +1,119 @@
+/*!
+ * Block Styles
+ *
+ * コアブロックの拡張スタイルを定義するファイル
+ *
+ * このCSSはフロントエンド（公開画面）とエディターの両方で読み込まれ、
+ * カスタムスタイルの見た目を定義します。
+ *
+ * @handle ts-style
+ */
+
+// =============================================================================
+// セパレーターブロック（core/separator）のカスタムスタイル
+// =============================================================================
+//
+// WordPressのブロックスタイルは、選択時に以下のクラスが付与される:
+// - is-style-{スタイル名}
+//
+// 例: registerBlockStyle で name: 'gradient' を登録した場合
+//     → is-style-gradient クラスが付与される
+//
+// セパレーターブロックのHTML構造:
+// <hr class="wp-block-separator has-alpha-channel-opacity is-style-gradient">
+//
+
+/**
+ * グラデーションスタイル
+ *
+ * 線の代わりにグラデーションの背景を持つブロック要素として表示する。
+ * hr要素はborderで線を表示するため、背景グラデーションを使うには
+ * height を指定して border を消す必要がある。
+ */
+.wp-block-separator.is-style-gradient {
+	// デフォルトのボーダーを消す
+	border: none;
+
+	// 高さを指定（線の太さになる）
+	height: 4px;
+
+	// グラデーション背景
+	// linear-gradient(方向, 開始色, 終了色)
+	background: linear-gradient(
+		to right,                    // 左から右へ
+		transparent,                 // 開始: 透明
+		currentColor 50%,            // 中央: 現在の文字色
+		transparent                  // 終了: 透明
+	);
+
+	// 透明度の調整（WordPressのデフォルトクラスと競合しないように）
+	opacity: 1;
+}
+
+/**
+ * 二重線スタイル
+ *
+ * CSSの border-style: double を使用する。
+ * double は最低 3px の太さが必要（線-空白-線）。
+ */
+.wp-block-separator.is-style-double {
+	// 二重線ボーダー
+	// double: 2本の線の間に空白が入るスタイル
+	border-style: double;
+
+	// 太さ（3px以上でないと二重線にならない）
+	border-width: 4px;
+
+	// 色は現在の文字色を継承
+	border-color: currentColor;
+}
+
+/**
+ * 波線スタイル
+ *
+ * CSSだけで波線を表現するのは難しいので、
+ * 繰り返しの円形グラデーションを使って波のような見た目を作る。
+ *
+ * テクニック:
+ * - radial-gradient で小さな円を作成
+ * - background-size と background-position で繰り返しパターンを作成
+ */
+.wp-block-separator.is-style-wave {
+	// デフォルトのボーダーを消す
+	border: none;
+
+	// 波の高さ
+	height: 10px;
+
+	// 波のパターンを作成
+	// radial-gradient(形状 サイズ at 位置, 色1, 色2)
+	background:
+		// 上半分の円弧
+		radial-gradient(
+			circle at 50% 0%,        // 円の中心を上端中央に
+			transparent 8px,          // 内側8pxは透明
+			currentColor 8px,         // 8pxから外側は線の色
+			currentColor 10px,        // 10pxまで線の色
+			transparent 10px          // それ以降は透明
+		);
+
+	// パターンのサイズ（波1つ分の幅と高さ）
+	background-size: 20px 10px;
+
+	// パターンを横に繰り返す
+	background-repeat: repeat-x;
+
+	// 透明度をリセット
+	opacity: 1;
+}
+
+// =============================================================================
+// エディター固有のスタイル調整
+// =============================================================================
+//
+// ブロックエディター内では、追加のラッパー要素が存在することがある。
+// 必要に応じてエディター固有のスタイルをここに追加する。
+//
+// エディター内のセレクタ例:
+// .editor-styles-wrapper .wp-block-separator.is-style-gradient { ... }
+//

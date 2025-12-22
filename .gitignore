@@ -2,6 +2,8 @@
 /build/
 /wordpress/
 
+wp-dependencies.json
+
 # ブロックは自由についかできるよう都度指定
 src/blocks/*
 !src/blocks/alert/

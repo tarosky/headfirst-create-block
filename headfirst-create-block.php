@@ -58,9 +58,35 @@ add_filter( 'block_categories_all', function ( $categories ) {
 } );
 
 /**
- * 外部のリソースを追加する
+ * リソースを追加する
  */
 add_action( 'init', function() {
+	// wp-dependencies.json
+	$json = __DIR__ . '/wp-dependencies.json';
+	if ( file_exists( $json ) ) {
+		$deps = json_decode( file_get_contents( $json ), true );
+		if ( $deps ) {
+			foreach ( $deps as $dep ) {
+				if ( empty( $dep['path']) ) {
+					continue;
+				}
+				$url = plugin_dir_url( __FILE__ ) . $dep['path'];
+				switch ( $dep['ext'] ) {
+					case 'js':
+						$footer = [
+							'in_footer' => $dep['footer'],
+							'strategy'  => $dep['strategy'],
+						];
+						wp_register_script( $dep['handle'], $url, $dep['deps'], $dep['hash'], $footer );
+						break;
+					case 'css':
+						wp_register_style( $dep['handle'], $url, $dep['deps'], $dep['hash'], $dep['media'] );
+						break;
+				}
+			}
+		}
+	}
+	// 外部リソース
 	// twitter bootstrap
 	// @see https://getbootstrap.jp/docs/5.3/getting-started/introduction/
 	wp_register_style( 'bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css', [], null, 'screen' );
@@ -74,3 +100,8 @@ add_action( 'init', function() {
  * 天気情報ブロックのAPI設定を読み込む
  */
 require_once __DIR__ . '/includes/setting-weather.php';
+
+/**
+ * ブロックスタイル拡張の読み込み
+ */
+require_once __DIR__ . '/includes/block-styles.php';
