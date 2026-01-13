@@ -12,6 +12,8 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/#view-script
  */
 
+/* global Chart:false */
+
 /**
  * CSVデータをパースする関数
  *
@@ -49,6 +51,7 @@ function parseCSV( csvData ) {
 function initChart( canvas ) {
 	// Chart.jsが読み込まれているか確認
 	if ( typeof Chart === 'undefined' ) {
+		// eslint-disable-next-line no-console
 		console.error( 'Chart.js is not loaded' );
 		return;
 	}
@@ -58,6 +61,7 @@ function initChart( canvas ) {
 	const parsedData = parseCSV( csvData );
 
 	if ( ! parsedData ) {
+		// eslint-disable-next-line no-console
 		console.error( 'Invalid CSV data' );
 		return;
 	}

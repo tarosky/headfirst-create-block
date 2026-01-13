@@ -45,8 +45,8 @@ domReady( () => {
 
 	// グラデーションスタイル
 	registerBlockStyle( 'core/separator', {
-		name: 'gradient',        // CSSクラス名: is-style-gradient
-		label: 'グラデーション',  // エディターに表示される名前
+		name: 'gradient', // CSSクラス名: is-style-gradient
+		label: 'グラデーション', // エディターに表示される名前
 	} );
 
 	// 二重線スタイル
