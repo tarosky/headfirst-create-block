@@ -79,69 +79,18 @@ add_action( 'add_meta_boxes', function() {
 /**
  * メタボックスの内容を表示する
  *
+ * React コンポーネントをマウントするためのコンテナのみを出力する。
+ * 実際のUIは JavaScript (meta-box.js) で描画され、
+ * useEntityProp を使って保存される。
+ *
  * @param WP_Post $post 現在の投稿オブジェクト
  */
 function headfirst_render_event_date_meta_box( $post ) {
-	// nonceフィールドを追加（CSRF対策）
-	wp_nonce_field( 'event_date_meta_box', 'event_date_meta_box_nonce' );
-
-	// 現在の値を取得
-	$event_date = get_post_meta( $post->ID, 'event_date', true );
 	?>
-	<p>
-		<label for="event_date_field">
-			イベント開催日を入力してください。<br>
-			<small>ブロックエディターで「イベント日」ブロックを追加すると、この値が表示されます。</small>
-		</label>
-	</p>
-	<p>
-		<input
-			type="date"
-			id="event_date_field"
-			name="event_date"
-			value="<?php echo esc_attr( $event_date ); ?>"
-			class="widefat"
-		/>
-	</p>
+	<div id="event-date-meta-box-root">
+		<!-- React コンポーネントがここにマウントされる -->
+		<p>読み込み中...</p>
+	</div>
 	<?php
 }
 
-/**
- * メタボックスからの保存処理
- *
- * save_post フックで投稿保存時にメタデータを保存する。
- *
- * 注意: ブロックエディターからの保存（REST API経由）では
- * このフックは呼ばれず、register_post_meta() の設定が使われる。
- * このフックはクラシックエディターやメタボックスからの保存用。
- *
- * @param int $post_id 投稿ID
- */
-add_action( 'save_post', function( $post_id ) {
-	// nonceチェック
-	if ( ! isset( $_POST['event_date_meta_box_nonce'] ) ) {
-		return;
-	}
-	if ( ! wp_verify_nonce( $_POST['event_date_meta_box_nonce'], 'event_date_meta_box' ) ) {
-		return;
-	}
-
-	// 自動保存時は何もしない
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-		return;
-	}
-
-	// 権限チェック
-	if ( ! current_user_can( 'edit_post', $post_id ) ) {
-		return;
-	}
-
-	// 値を保存
-	if ( isset( $_POST['event_date'] ) ) {
-		update_post_meta(
-			$post_id,
-			'event_date',
-			sanitize_text_field( $_POST['event_date'] )
-		);
-	}
-} );

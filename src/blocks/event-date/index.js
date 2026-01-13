@@ -13,6 +13,8 @@
  */
 
 import { registerBlockType } from '@wordpress/blocks';
+import { createRoot } from '@wordpress/element';
+import domReady from '@wordpress/dom-ready';
 
 /**
  * スタイルシートの読み込み
@@ -26,6 +28,7 @@ import './style.scss';
 
 import Edit from './edit';
 import metadata from './block.json';
+import MetaBoxContent from './meta-box';
 
 /**
  * ブロックを登録
@@ -39,4 +42,23 @@ registerBlockType( metadata.name, {
 
 	// 動的ブロック（PHPでレンダリング）のためsaveはnull
 	save: () => null,
+} );
+
+/**
+ * メタボックスに React コンポーネントをマウント
+ *
+ * add_meta_box() で作成されたメタボックス内のコンテナに
+ * React コンポーネントをマウントする。
+ *
+ * これにより、従来のフォーム送信ではなく useEntityProp を使った
+ * REST API 経由でメタデータが保存される。
+ *
+ * domReady を使用してDOMの準備完了を待つ。
+ */
+domReady( () => {
+	const container = document.getElementById( 'event-date-meta-box-root' );
+	if ( container ) {
+		const root = createRoot( container );
+		root.render( <MetaBoxContent /> );
+	}
 } );
