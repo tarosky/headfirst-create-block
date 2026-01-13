@@ -32,6 +32,7 @@
  * .is-cta-arrow: CTAバリエーションを示すクラス（registerBlockVariationで設定）
  */
 .wp-block-button.is-cta-arrow {
+
 	/**
 	 * ボタン本体（リンク要素）のスタイル
 	 *
@@ -100,6 +101,7 @@
 	 * - ただし、CSSのみで完結させたい場合は :hover を使っても良い
 	 */
 	.wp-block-button__link.is-hovered {
+
 		/**
 		 * 矢印を右に移動するアニメーション
 		 *
@@ -119,6 +121,7 @@
 	 */
 	.wp-block-button__link:hover,
 	.wp-block-button__link:focus {
+
 		.cta-arrow {
 			transform: translateY(-50%) translateX(5px);
 		}
@@ -141,14 +144,16 @@
  * このセレクタを使うことで、エディター内でのみ適用されるスタイルを定義できる。
  */
 .editor-styles-wrapper {
+
 	.wp-block-button.is-cta-arrow {
+
 		.wp-block-button__link {
 			// エディターでも右側の余白を確保
 			padding-right: 2.5em;
 
 			// 矢印を ::after 疑似要素で追加
 			&::after {
-				content: '→';
+				content: "→";
 				position: absolute;
 				top: 50%;
 				right: 1em;

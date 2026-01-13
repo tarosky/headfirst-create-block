@@ -44,8 +44,17 @@ export default function Edit() {
 					'core/quote',
 				] }
 				template={ [
-					[ 'core/heading', { level: 4, placeholder: __( '注釈タイトル', 'tarosky' ) } ],
-					[ 'core/paragraph', { placeholder: __( '注釈の内容を入力...', 'tarosky' ) } ],
+					[
+						'core/heading',
+						{
+							level: 4,
+							placeholder: __( '注釈タイトル', 'tarosky' ),
+						},
+					],
+					[
+						'core/paragraph',
+						{ placeholder: __( '注釈の内容を入力…', 'tarosky' ) },
+					],
 				] }
 			/>
 		</aside>

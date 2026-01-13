@@ -46,7 +46,10 @@ domReady( () => {
 		title: __( 'CTAボタン（矢印付き）', 'headfirst-create-block' ),
 
 		// バリエーションの説明（挿入パネルでホバー時に表示）
-		description: __( 'ホバー時に矢印がアニメーションするCTAボタン', 'headfirst-create-block' ),
+		description: __(
+			'ホバー時に矢印がアニメーションするCTAボタン',
+			'headfirst-create-block'
+		),
 
 		// アイコン
 		// WordPress の Dashicons または SVG を指定できる

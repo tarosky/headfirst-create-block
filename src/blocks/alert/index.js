@@ -31,42 +31,54 @@ function getAlertClass( className ) {
 }
 
 /**
+ * エディター内での表示
+ *
+ * @param {Object}   props               - ブロックのプロパティ
+ * @param {Object}   props.attributes    - ブロックの属性
+ * @param {Function} props.setAttributes - 属性を更新する関数
+ * @return {JSX.Element} エディター用のJSX
+ */
+function Edit( { attributes, setAttributes } ) {
+	const blockProps = useBlockProps();
+	const alertClass = getAlertClass( blockProps.className );
+
+	return (
+		<RichText
+			{ ...blockProps }
+			tagName="div"
+			className={ `${ blockProps.className } alert ${ alertClass }` }
+			value={ attributes.content }
+			onChange={ ( content ) => setAttributes( { content } ) }
+			placeholder={ __( 'アラートメッセージを入力…', 'tarosky' ) }
+		/>
+	);
+}
+
+/**
+ * 保存時のHTML出力
+ *
+ * @param {Object} props            - ブロックのプロパティ
+ * @param {Object} props.attributes - ブロックの属性
+ * @return {JSX.Element} 保存用のJSX
+ */
+function Save( { attributes } ) {
+	const blockProps = useBlockProps.save();
+	const alertClass = getAlertClass( blockProps.className );
+
+	return (
+		<RichText.Content
+			{ ...blockProps }
+			tagName="div"
+			className={ `${ blockProps.className } alert ${ alertClass }` }
+			value={ attributes.content }
+		/>
+	);
+}
+
+/**
  * ブロックの登録
  */
 registerBlockType( metadata.name, {
-	/**
-	 * エディター内での表示
-	 */
-	edit( { attributes, setAttributes, className } ) {
-		const blockProps = useBlockProps();
-		const alertClass = getAlertClass( blockProps.className );
-
-		return (
-			<RichText
-				{ ...blockProps }
-				tagName="div"
-				className={ `${ blockProps.className } alert ${ alertClass }` }
-				value={ attributes.content }
-				onChange={ ( content ) => setAttributes( { content } ) }
-				placeholder={ __( 'アラートメッセージを入力...', 'tarosky' ) }
-			/>
-		);
-	},
-
-	/**
-	 * 保存時のHTML出力
-	 */
-	save( { attributes } ) {
-		const blockProps = useBlockProps.save();
-		const alertClass = getAlertClass( blockProps.className );
-
-		return (
-			<RichText.Content
-				{ ...blockProps }
-				tagName="div"
-				className={ `${ blockProps.className } alert ${ alertClass }` }
-				value={ attributes.content }
-			/>
-		);
-	},
+	edit: Edit,
+	save: Save,
 } );

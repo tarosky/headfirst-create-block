@@ -39,12 +39,11 @@
 
 	// グラデーション背景
 	// linear-gradient(方向, 開始色, 終了色)
-	background: linear-gradient(
-		to right,                    // 左から右へ
-		transparent,                 // 開始: 透明
-		currentColor 50%,            // 中央: 現在の文字色
-		transparent                  // 終了: 透明
-	);
+	background:
+		linear-gradient(to right, /* 左から右へ*/
+		transparent, /* 開始: 透明*/
+		currentcolor 50%, /* 中央: 現在の文字色*/
+		transparent                  /* 終了: 透明*/);
 
 	// 透明度の調整（WordPressのデフォルトクラスと競合しないように）
 	opacity: 1;
@@ -65,7 +64,7 @@
 	border-width: 4px;
 
 	// 色は現在の文字色を継承
-	border-color: currentColor;
+	border-color: currentcolor;
 }
 
 /**
@@ -89,13 +88,11 @@
 	// radial-gradient(形状 サイズ at 位置, 色1, 色2)
 	background:
 		// 上半分の円弧
-		radial-gradient(
-			circle at 50% 0%,        // 円の中心を上端中央に
-			transparent 8px,          // 内側8pxは透明
-			currentColor 8px,         // 8pxから外側は線の色
-			currentColor 10px,        // 10pxまで線の色
-			transparent 10px          // それ以降は透明
-		);
+		radial-gradient(circle at 50% 0%, 
+			transparent 		, 
+			currentcolor 8px, 
+			cur		tcolor 10px, 
+			transparent 10px  		     )		;
 
 	// パターンのサイズ（波1つ分の幅と高さ）
 	background-size: 20px 10px;

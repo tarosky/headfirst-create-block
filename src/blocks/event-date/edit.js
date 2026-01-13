@@ -12,14 +12,14 @@ import { useEntityProp } from '@wordpress/core-data';
 /**
  * Edit コンポーネント
  *
- * @param {Object} props              コンポーネントのプロパティ
- * @param {Object} props.attributes   ブロックの属性
+ * @param {Object}   props               コンポーネントのプロパティ
+ * @param {Object}   props.attributes    ブロックの属性
  * @param {Function} props.setAttributes 属性を更新する関数
- * @param {Object} props.context      ブロックのコンテキスト（postId, postType など）
+ * @param {Object}   props.context       ブロックのコンテキスト（postId, postType など）
  */
 export default function Edit( { attributes, setAttributes, context } ) {
 	const { prefix } = attributes;
-	const { postType, postId } = context;
+	const { postType } = context;
 
 	/**
 	 * useEntityProp フック
@@ -47,9 +47,9 @@ export default function Edit( { attributes, setAttributes, context } ) {
 	 * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-core-data/#useentityprop
 	 */
 	const [ meta, setMeta ] = useEntityProp(
-		'postType',  // kind: 投稿タイプのエンティティ
-		postType,    // name: 投稿タイプ名（context から取得）
-		'meta'       // prop: メタデータ
+		'postType', // kind: 投稿タイプのエンティティ
+		postType, // name: 投稿タイプ名（context から取得）
+		'meta' // prop: メタデータ
 		// id は省略（現在編集中の投稿）
 	);
 
@@ -78,20 +78,30 @@ export default function Edit( { attributes, setAttributes, context } ) {
 
 	return (
 		<>
-			{/* サイドバーの設定パネル */}
+			{ /* サイドバーの設定パネル */ }
 			<InspectorControls>
 				<PanelBody title={ __( '表示設定', 'headfirst-create-block' ) }>
 					<TextControl
 						label={ __( '接頭辞', 'headfirst-create-block' ) }
-						help={ __( '日付の前に表示するテキスト', 'headfirst-create-block' ) }
+						help={ __(
+							'日付の前に表示するテキスト',
+							'headfirst-create-block'
+						) }
 						value={ prefix }
-						onChange={ ( value ) => setAttributes( { prefix: value } ) }
+						onChange={ ( value ) =>
+							setAttributes( { prefix: value } )
+						}
 					/>
 				</PanelBody>
-				<PanelBody title={ __( 'イベント日', 'headfirst-create-block' ) }>
+				<PanelBody
+					title={ __( 'イベント日', 'headfirst-create-block' ) }
+				>
 					<TextControl
 						label={ __( '日付', 'headfirst-create-block' ) }
-						help={ __( 'メタボックスと同期されます', 'headfirst-create-block' ) }
+						help={ __(
+							'メタボックスと同期されます',
+							'headfirst-create-block'
+						) }
 						type="date"
 						value={ eventDate }
 						onChange={ updateEventDate }
@@ -99,7 +109,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 				</PanelBody>
 			</InspectorControls>
 
-			{/* ブロックの表示 */}
+			{ /* ブロックの表示 */ }
 			<div { ...blockProps }>
 				{ eventDate ? (
 					<p className="wp-block-tarosky-event-date__content">
@@ -126,7 +136,10 @@ export default function Edit( { attributes, setAttributes, context } ) {
 							type="date"
 							value={ eventDate }
 							onChange={ updateEventDate }
-							placeholder={ __( '日付を選択', 'headfirst-create-block' ) }
+							placeholder={ __(
+								'日付を選択',
+								'headfirst-create-block'
+							) }
 						/>
 					</Placeholder>
 				) }
